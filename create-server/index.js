@@ -16,8 +16,8 @@ let app = express();
 app.use(bodyParser.urlencoded({ extend: false }));
 app.use(bodyParser.json());
 
-//chama o consign, pede pra incluir asd routes para dentro do app
-consign().include('routes').into(app);
+//chama o consign, pede pra incluir as pastas selecionadas para dentro do app, 
+consign().include('routes').include('utils').into(app);
 //declara para o app os arquivos armazenados nas variavéis para ser usado pelo server
 // app.use(routesIndex);
 // app.use('/users',routesUsers);

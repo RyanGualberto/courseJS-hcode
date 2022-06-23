@@ -1,21 +1,19 @@
+let NeDB = require('nedb');
+let db = new NeDB({
+    filename: 'users.db',
+    autoload: true
+});
+
 //exporta o módulo, permitindo a importação em outros arquivos
 module.exports = (app) => {
 
-    let NeDB = require('nedb');
-    let db = new NeDB({
-        filename: 'users.db',
-        autoload: true
-    });
-
+    let route = app.route('/users');
     //cria a rota  users
-    app.get('/users', (req, res) => {
+    route.get((req, res) => {
 
         db.find({}).sort({ name: 1 }).exec((err, users) => {
             if (err) {
-                console.log(`error:  ${err}`);
-                res.status(400).json({
-                    error: err
-                })
+                app.utils.error.send(err, req, res)
             }
             else {
                 //código de que o cliente conseguiu acessar
@@ -32,7 +30,7 @@ module.exports = (app) => {
 
     });
 
-    app.post('/users', (req, res) => {
+    route.post((req, res) => {
         // //código de que o cliente conseguiu acessar
         // res.statusCode = 200;
         // //especifica o tipo de conteúdo a ser exibido(JSON)
@@ -40,10 +38,21 @@ module.exports = (app) => {
         //responde um em JSON
         db.insert(req.body, (err, user) => {
             if (err) {
-                console.log(`erro:  ${err}`);
-                res.status(400).json({
-                    error: err
-                });
+                app.utils.error.send(err, req, res)
+            }
+            else {
+                res.status(200).json(user);
+            }
+        });
+    });
+    let routeId = app.route('/users/:id');
+
+    routeId.get((req,res) => {
+        db.findOne({
+            _id:req.params.id
+        }).exec((err, user) => {
+            if (err) {
+                app.utils.error.send(err, req, res)
             }
             else {
                 res.status(200).json(user);
