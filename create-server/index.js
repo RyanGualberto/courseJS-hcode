@@ -3,10 +3,10 @@
 
 //chama a dependencia instalada 'express' e cria o http internamente
 const express = require('express');
-//chama a dependencia instalada 'consign'
+//chama as dependencias instaladas
 const consign = require('consign');
-//chama a dependencia instalada 'body parse'
 const bodyParser = require('body-parser');
+const expressValidator = require('express-validator');
 //procura dentro do projeto a pasta desejada
 // let routesIndex = require('./routes/index')
 // let routesUsers = require('./routes/users')
@@ -15,7 +15,7 @@ let app = express();
 
 app.use(bodyParser.urlencoded({ extend: false }));
 app.use(bodyParser.json());
-
+app.use(expressValidator());
 //chama o consign, pede pra incluir as pastas selecionadas para dentro do app, 
 consign().include('routes').include('utils').into(app);
 //declara para o app os arquivos armazenados nas variavéis para ser usado pelo server
