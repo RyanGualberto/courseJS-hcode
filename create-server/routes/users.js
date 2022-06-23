@@ -38,14 +38,17 @@ module.exports = (app) => {
         // res.setHeader('Content-Type', 'application/json');
         //responde um em JSON
 
+        //chama o módulo de validação
         if (!app.utils.validator.user(app, req, res)) return false;
 
-
+        //chama o método insert no banco de dados por meio da variavel que o representa
         db.insert(req.body, (err, user) => {
             if (err) {
+                //se houver erro, envia o erro, e os parametros
                 app.utils.error.send(err, req, res)
             }
             else {
+                //se não tiver erro, responde os stts 200 e segue a aplicação
                 res.status(200).json(user);
             }
         });
@@ -70,9 +73,10 @@ module.exports = (app) => {
 
     //cria o método de update
     routeId.put((req, res) => {
-        
+        //chama o módulo de validação
         if (!app.utils.validator.user(app, req, res)) return false;
 
+        //chama o método update no banco de dados por meio da variavel que o representa
         db.update({
             _id: req.params.id
         },
@@ -91,11 +95,13 @@ module.exports = (app) => {
 
     //cria o método delete
     routeId.delete((req, res) => {
+        //chama o método delete no banco de dados por meio da variavel que o representa
         db.remove({
             _id: req.params.id
         },
             {},
             err => {
+            //busca por um erro, caso não tenha envia o stts 200 indicando que a aplicação está funcnionando
                 if (err) {
                     app.utils.error.send(err, req, res)
                 }
